@@ -1,0 +1,96 @@
+<style>
+    
+
+    /* Sidebar styling */
+     .sidebar {
+      width:250px;
+      background:var(--sidebar);
+      color:var(--text-light);
+      display:flex;
+      flex-direction:column;
+      padding:1rem;
+    }
+    .sidebar h2 {
+      text-align:center;
+      margin-bottom:2rem;
+      font-size:1.5rem;
+      color:var(--accent);
+    }
+
+    .menu a {
+        text-decoration: none;
+        color: var(--text-light);
+        padding: .75rem 1rem;
+        border-radius: 6px;
+        display: block;
+        margin-bottom: .5rem;
+        font-weight: 500;
+        transition: background .3s ease;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+        background: var(--secondary);
+    }
+
+    /* Logout button */
+    .logout {
+        margin-top: auto;
+    }
+</style>
+
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+    <div class="menu">
+        {% load role_tags %}
+
+{% if request|check_role:"admin" %}
+    <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+{% elif request|check_role:"teacher" %}
+    <a href="{% url 'teacher_dashboard' %}">Dashboard</a>
+{% elif request|check_role:"student" %}
+    <a href="{% url 'student_dashboard' %}">Dashboard</a>
+{% elif request|check_role:"parent" %}
+    <a href="{% url 'parent_dashboard' %}">Dashboard</a>
+{% endif %}
+
+        
+        {% load permission_tags %}
+
+        {% if request|check_permission:"student" %}
+        <a href="{% url 'students' %}">Students</a>
+        {% endif %}
+
+        {% if request|check_permission:"teacher" %}
+        <a href="{% url 'teacher' %}">Teachers</a>
+        {% endif %}
+
+        {% if request|check_permission:"classes" %}
+        <a href="{% url 'classes' %}">Classes</a>
+        {% endif %}
+
+        {% if request|check_permission:"events" %}
+        <a href="{% url 'events' %}">Events</a>
+        {% endif %}
+
+        {% if request|check_permission:"roles" %}
+        <a href="{% url 'role_list' %}">Roles</a>
+        {% endif %}
+
+        {% if request|check_permission:"permissions" %}
+        <a href="{% url 'permission_list' %}">Permissions</a>
+        {% endif %}
+
+        {% if request|check_permission:"role_permissions" %}
+        <a href="{% url 'role_permission_list' %}">Role Permissions</a>
+        {% endif %}
+
+       
+        <a href="{% url 'settings' %}">Settings</a>
+        
+
+    </div>
+    <div class="menu logout">
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Springfield Public School - Inspiring Futures</title>
+  <meta name="description" content="Landing page for Springfield Public School with modern design and animations.">
+  <style>
+    /* Base */
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family:'Poppins', Arial, sans-serif;
+      background:#f4f4f9;
+      color:#1a1a1a;
+      line-height:1.6;
+      overflow-x:hidden;
+      scroll-behavior:smooth;
+    }
+    img { max-width:100%; display:block; border-radius:8px; }
+    a { text-decoration:none; }
+
+    /* Palette */
+    :root{
+      --primary:#f4b078;      /* deep navy-teal */
+      --secondary:#f95738;    /* coral */
+      --accent:#faa916;       /* warm yellow */
+      --light:#ffffff;
+      --bg-light:#f4f4f9;
+      --text-dark:#1a1a1a;
+    }
+
+    /* Header */
+    header{
+      background:var(--primary);color:var(--light);
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 2rem;position:sticky;top:0;z-index:1000;
+      box-shadow:0 3px 8px rgba(0,0,0,.2);animation:slideDown 1s ease-in-out
+    }
+    header h1{font-size:1.6rem;font-weight:600;letter-spacing:1px}
+    .login-btn{
+      background:var(--accent);color:var(--text-dark);
+      padding:.5rem 1.2rem;border-radius:30px;font-weight:bold;transition:all .3s ease
+    }
+    .login-btn:hover{background:#e29f14;transform:translateY(-2px)}
+
+    /* Nav */
+    nav{background:#d17d38;display:flex;justify-content:center;flex-wrap:wrap}
+    nav a{color:var(--light);padding:.75rem 1rem;font-weight:500;transition:background .3s ease}
+    nav a:hover{background:rgba(250,169,22,.2)}
+
+    /* HERO with animated gradient overlay */
+    .hero{
+      position:relative;overflow:hidden;color:var(--light);text-align:center;
+      padding:7rem 1rem 6rem; /* spacing */
+      background:url('school-campus.jpg') center/cover no-repeat; /* keep your image */
+      animation:fadeIn 1.2s ease-in-out;
+    }
+    /* animated gradient overlay */
+    .hero::before{
+      content:"";position:absolute;inset:0;z-index:0;
+      background:linear-gradient(-45deg,
+        rgba(13,59,102,0.65),
+        rgba(249,87,56,0.55),
+        rgba(250,169,22,0.55),
+        rgba(244,244,249,0.45)
+      );
+      background-size:400% 400%;
+      animation:gradientShift 20s ease infinite;
+    }
+    .hero > *{position:relative;z-index:1}
+    .hero h2{font-size:2.8rem;margin-bottom:.5rem;animation:fadeUp 1.5s ease-in-out}
+    .hero p{font-size:1.2rem;max-width:600px;margin:0 auto 1.5rem;animation:fadeUp 1.7s ease-in-out}
+    .hero .cta-btn{
+      display:inline-block;background:var(--secondary);color:var(--light);
+      padding:.9rem 1.8rem;border-radius:30px;font-weight:bold;transition:all .3s ease;
+      animation:fadeUp 2s ease-in-out
+    }
+    .hero .cta-btn:hover{background:#d1462d;transform:translateY(-2px)}
+
+    /* Sections */
+    .container{
+      width:90%;max-width:1100px;margin:2rem auto;padding:2rem;background:var(--light);
+      border-radius:12px;box-shadow:0 3px 12px rgba(0,0,0,.08);
+      opacity:0;transform:translateY(30px);transition:all 1s ease-out
+    }
+    .container.visible{opacity:1;transform:translateY(0)}
+    .section h2{color:var(--secondary);font-size:1.9rem;margin-bottom:.6rem}
+    .section p{font-size:1rem;color:var(--text-dark)}
+
+    /* Footer */
+    footer{background:var(--primary);color:var(--light);text-align:center;padding:1rem;margin-top:2rem;font-size:.95rem}
+
+    /* Animations */
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes gradientShift{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    /* Responsive */
+    @media (max-width:768px){
+      header h1{font-size:1.3rem}
+      .hero{padding:5.5rem 1rem 4.5rem}
+      .hero h2{font-size:2rem}
+      .hero p{font-size:1rem}
+      .container{padding:1.2rem}
+    }
+    @media (max-width:480px){
+      .hero h2{font-size:1.6rem}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>Springfield Public School</h1>
+    <a href="{% url 'login' %}" class="login-btn">Login</a>
+  </header>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#about">About Us</a>
+    <a href="#admissions">Admissions</a>
+    <a href="#academics">Academics</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h2>Shaping Bright Futures</h2>
+    <p>At Springfield Public School, we empower young minds to thrive in every aspect of life.</p>
+    <a href="#admissions" class="cta-btn">Apply Now</a>
+  </section>
+
+  <!-- Sections -->
+  <div class="container section" id="about">
+    <h2>About Us</h2>
+    <p>Springfield Public School is a hub of learning, where students grow academically, socially, and emotionally. Our teachers inspire curiosity and innovation, preparing students to lead tomorrow.</p>
+  </div>
+
+  <div class="container section" id="admissions">
+    <h2>Admissions</h2>
+    <p>Our admission process is seamless and student-focused. Join our community and experience education designed for excellence.</p>
+  </div>
+
+  <div class="container section" id="academics">
+    <h2>Academics</h2>
+    <p>We offer a diverse curriculum balanced with arts, sports, and STEM programs, encouraging every child to explore their passions.</p>
+  </div>
+
+  <div class="container section" id="contact">
+    <h2>Contact Us</h2>
+    <p>Email: info@springfieldschool.edu<br>Phone: (555) 123-4567<br>Address: 123 Main Street, Springfield</p>
+  </div>
+
+  <!-- Footer -->
+  <footer>&copy; <span id="year"></span> Springfield Public School. All rights reserved.</footer>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Reveal on scroll
+    const containers = document.querySelectorAll('.container');
+    const revealOnScroll = () => {
+      containers.forEach(c => {
+        const rect = c.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) c.classList.add('visible');
+      });
+    };
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+  </script>
+</body>
+</html>

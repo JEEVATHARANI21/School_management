@@ -1,0 +1,138 @@
+  {% extends "baselayout.html" %}
+
+  {% block title %} 
+  
+  Student Management - Springfield Public School 
+ 
+  
+  {% endblock %}
+
+ 
+  {% block content %}
+
+  {% load permission_tags %}
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Manage Student</h1>
+
+    {% if request|check_permission:"add_students" %}
+    <button class="add-btn" onclick="openModal()">+ Add Students</button>
+    {% endif %}
+
+    <h1>Student List</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Regnum</th>
+            <th>Sec</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        {% for student in student %}
+        <tr>
+            <td>{{ student.id }}</td>
+            <td>{{ student.name }}</td>
+            <td>{{ student.regnum }}</td>
+            <td>{{ student.sec }}</td>
+            <td>{{ student.email }}</td>
+            <td class="actions">
+                {% if request|check_permission:"student_edit" %}
+                <button class="edit-btn" onclick="openEditModal({{ student.id }}, '{{ student.name }}', '{{ student.regnum }}', '{{ student.sec }}', '{{ student.email }}')">Edit</button>
+                {% endif %}
+                <form method="post" action="{% url 'delete_student' student.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    {% if request|check_permission:"student_delete" %}
+                    <button type="submit" class="delete-btn">Delete</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No student found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+
+  <!-- Add student Modal -->
+  <div class="modal" id="studentModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">X</button>
+      <h2>Add student</h2>
+      <form method="post" action="{% url 'add_student' %}">
+        {% csrf_token %}
+        <!-- Add Student -->
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="regnum">Reg. Number:</label>
+        <input type="text" id="regnum" name="regnum" required>
+
+        <label for="sec">Sec:</label>
+        <input type="text" id="sec" name="sec" required>
+
+
+        <button type="submit" class="save-btn">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit student Modal -->
+  <div class="modal" id="editstudentModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeEditModal()">X</button>
+        <h2>Edit student</h2>
+        <form method="post" id="editstudentForm">
+            {% csrf_token %}
+            <!-- Edit Student -->
+            <label for="edit_name">Name:</label>
+            <input type="text" id="edit_name" name="name" required>
+
+            <label for="edit_email">Email:</label>
+            <input type="email" id="edit_email" name="email" required>
+
+            <label for="edit_regnum">Reg. Number:</label>
+            <input type="text" id="edit_regnum" name="regnum" required>
+
+            <label for="edit_sec">Sec:</label>
+            <input type="text" id="edit_sec" name="sec" required>
+ 
+            <button type="submit" class="save-btn">Update</button>
+        </form>
+    </div>
+  </div>
+
+  <script>
+    function openModal() { document.getElementById('studentModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('studentModal').style.display = 'none'; }
+
+    function openEditModal(id, name, regnum, sec, email) {
+    document.getElementById('edit_student_id').value = id;
+    document.getElementById('edit_name').value = name;
+    document.getElementById('edit_regnum').value = regnum;
+    document.getElementById('edit_sec').value = sec;
+    document.getElementById('edit_email').value = email;
+
+    document.getElementById('editstudentForm').action = '/edit_student/' + id + '/';
+    document.getElementById('editstudentModal').style.display = 'flex';
+}
+
+    
+
+    function closeEditModal() { document.getElementById('editstudentModal').style.display = 'none'; }
+
+    window.onclick = function(e) {
+        if (e.target == document.getElementById('studentModal')) closeModal();
+        if (e.target == document.getElementById('editstudentModal')) closeEditModal();
+    }
+  </script>
+
+
+ {% endblock %}
+

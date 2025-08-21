@@ -1,0 +1,34 @@
+
+ {% extends "baselayout.html" %}
+
+  {% block title %} 
+  
+  Student Dashboard - Springfield Public School 
+  
+  {% endblock %}
+  
+
+  {% block content %}
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Welcome, {{ user.first_name }} (Teacher)</h1>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Upcoming Classes</h3>
+        <p>No scheduled classes for today.</p>
+      </div>
+      <div class="card">
+        <h3>Assignments to Review</h3>
+        <p>No pending submissions right now.</p>
+      </div>
+      <div class="card">
+        <h3>Reports & Attendance</h3>
+        <p>Generate student performance and attendance reports.</p>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+

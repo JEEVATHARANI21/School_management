@@ -1,0 +1,127 @@
+
+  {% extends "baselayout.html" %}
+
+  {% block title %} 
+  
+  Event Management - Springfield Public School 
+ 
+  
+  {% endblock %}
+
+ 
+  {% block content %}
+  {% load permission_tags %}
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Manage Events</h1>
+    {% if request|check_permission:"add_event" %}
+    <button class="add-btn" onclick="openModal()">+ Add Event</button>
+    {% endif %}
+
+    <h1>Event List</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Event Name</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        {% for event in events %}
+        <tr>
+            <td>{{ event.id }}</td>
+            <td>{{ event.name }}</td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.location }}</td>
+            <td>{{ event.description }}</td>
+            <td class="actions">
+              {% if request|check_permission:"events_edit" %}
+                <button class="edit-btn" onclick="openEditModal({{ event.id }}, '{{ event.name }}', '{{ event.date }}', '{{ event.location }}', '{{ event.description }}')">Edit</button>
+              {% endif %}
+                <form method="post" action="{% url 'delete_event' event.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    {% if request|check_permission:"events_delete" %}
+                    <button type="submit" class="delete-btn">Delete</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No events found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+
+  <!-- Add Event Modal -->
+  <div class="modal" id="eventModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">X</button>
+      <h2>Add Event</h2>
+      <form method="post" action="{% url 'add_event' %}">
+        {% csrf_token %}
+        <label for="name">Event Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+
+        <button type="submit" class="save-btn">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Event Modal -->
+  <div class="modal" id="editEventModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeEditModal()">X</button>
+        <h2>Edit Event</h2>
+        <form method="post" id="editEventForm">
+            {% csrf_token %}
+            <label for="edit_name">Event Name:</label>
+            <input type="text" id="edit_name" name="name" required>
+
+            <label for="edit_date">Date:</label>
+            <input type="date" id="edit_date" name="date" required>
+
+            <label for="edit_location">Location:</label>
+            <input type="text" id="edit_location" name="location" required>
+
+            <label for="edit_description">Description:</label>
+            <textarea id="edit_description" name="description"></textarea>
+
+            <button type="submit" class="save-btn">Update</button>
+        </form>
+    </div>
+  </div>
+
+  <script>
+    function openModal() { document.getElementById('eventModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('eventModal').style.display = 'none'; }
+
+    function openEditModal(id, name, date, location, description) {
+      document.getElementById('edit_name').value = name;
+      document.getElementById('edit_date').value = date;
+      document.getElementById('edit_location').value = location;
+      document.getElementById('edit_description').value = description;
+      document.getElementById('editEventForm').action = '/edit_event/' + id + '/';
+      document.getElementById('editEventModal').style.display = 'flex';
+    }
+
+    function closeEditModal() { document.getElementById('editEventModal').style.display = 'none'; }
+
+    window.onclick = function(e) {
+        if (e.target == document.getElementById('eventModal')) closeModal();
+        if (e.target == document.getElementById('editEventModal')) closeEditModal();
+    }
+  </script>
+{% endblock %}

@@ -1,0 +1,84 @@
+  {% extends "baselayout.html" %}
+
+  {% block title %} 
+  
+   Settings - Springfield Public School 
+ 
+  
+  {% endblock %}
+
+ 
+  {% block content %}
+  
+  {% load permission_tags %}
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>School Settings</h1>
+    <table>
+      <tr>
+        <th>Setting</th>
+        <th>Value</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td>School Name</td>
+        <td>{{ settings.school_name }}</td>
+        {% if request|check_permission:"settings_edit" %}
+        <td><button class="edit-btn" onclick="openEditModal('school_name', '{{ settings.school_name }}')">Edit</button></td>
+        {% endif %}
+      </tr>
+      <tr>
+        <td>Address</td>
+        <td>{{ settings.address }}</td>
+        {% if request|check_permission:"settings_edit" %}
+        <td><button class="edit-btn" onclick="openEditModal('address', '{{ settings.address }}')">Edit</button></td>
+        {% endif %}
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{ settings.email }}</td>
+        {% if request|check_permission:"settings_edit" %}
+        <td><button class="edit-btn" onclick="openEditModal('email', '{{ settings.email }}')">Edit</button></td>
+        {% endif %}
+      </tr>
+      <tr>
+        <td>Phone</td>
+        <td>{{ settings.phone }}</td>
+        {% if request|check_permission:"settings_edit" %}
+        <td><button class="edit-btn" onclick="openEditModal('phone', '{{ settings.phone }}')">Edit</button></td>
+        {% endif %}
+      </tr>
+    </table>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal" id="editSettingModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeEditModal()">X</button>
+      <h2>Edit Setting</h2>
+      <form method="post" id="editSettingForm">
+        {% csrf_token %}
+        <input type="hidden" name="field_name" id="edit_field_name">
+        <label for="edit_field_value">Value:</label>
+        <input type="text" id="edit_field_value" name="field_value" required>
+        <button type="submit" class="save-btn">Update</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openEditModal(field, value) {
+      document.getElementById('edit_field_name').value = field;
+      document.getElementById('edit_field_value').value = value;
+      document.getElementById('editSettingForm').action = '/update_setting/' + field + '/';
+      document.getElementById('editSettingModal').style.display = 'flex';
+    }
+    function closeEditModal() { 
+      document.getElementById('editSettingModal').style.display = 'none'; 
+    }
+    window.onclick = function(e) {
+      if (e.target == document.getElementById('editSettingModal')) closeEditModal();
+    }
+  </script>
+{% endblock %}

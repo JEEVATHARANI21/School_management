@@ -1,0 +1,43 @@
+
+  {% extends "baselayout.html" %}
+
+  {% block title %} 
+  
+  Admin Dashboard - Springfield Public School 
+ 
+  
+  {% endblock %}
+
+ 
+  {% block content %}
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Welcome, {{ user.username }} (Admin)</h1>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Total Students</h3>
+        <p>Manage student admissions, profiles, and performance reports.</p>
+      </div>
+      <div class="card">
+        <h3>Total Teachers</h3>
+        <p>View teacher records, assign classes, and update information.</p>
+      </div>
+      <div class="card">
+        <h3>Class Management</h3>
+        <p>Create and organize class schedules, sections, and assignments.</p>
+      </div>
+      <div class="card">
+        <h3>Upcoming Events</h3>
+        <p>Manage school events, holidays, and important announcements.</p>
+      </div>
+      <div class="card">
+        <h3>Settings</h3>
+        <p>Update school information, system preferences, and user roles.</p>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+

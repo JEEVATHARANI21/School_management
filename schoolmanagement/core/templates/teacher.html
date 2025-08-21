@@ -1,0 +1,125 @@
+  {% extends "baselayout.html" %}
+
+  {% block title %} 
+  
+  Teacher Management - Springfield Public School 
+ 
+  
+  {% endblock %}
+
+ 
+  {% block content %}
+
+  {% load permission_tags %}
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Manage Teachers</h1>
+    {% if request|check_permission:"add_teacher" %}
+    <button class="add-btn" onclick="openModal()">+ Add Teacher</button>
+    {% endif %}
+    <h1>Teacher List</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Subject</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        {% for teacher in teachers %}
+        <tr>
+            <td>{{ teacher.id }}</td>
+            <td>{{ teacher.name }}</td>
+            <td>{{ teacher.subject }}</td>
+            <td>{{ teacher.email }}</td>
+            <td class="actions">
+                {% if request|check_permission:"student" %}
+                <button class="edit-btn" onclick="openEditModal({{ teacher.id }}, '{{ teacher.name }}', '{{ teacher.subject }}', '{{ teacher.email }}')">Edit</button>
+                {% endif %}
+                <form method="post" action="{% url 'delete_teacher' teacher.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    {% if request|check_permission:"student" %}
+                    <button type="submit" class="delete-btn">Delete</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No teachers found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+
+  <!-- Add Teacher Modal -->
+  <div class="modal" id="teacherModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">X</button>
+      <h2>Add Teacher</h2>
+      <form method="post" action="{% url 'add_teacher' %}">
+        {% csrf_token %}
+        <input type="hidden" name="add_teacher" value="1">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required>
+        
+        <button type="submit" class="save-btn">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Teacher Modal -->
+  <div class="modal" id="editTeacherModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeEditModal()">X</button>
+      <h2>Edit Teacher</h2>
+      <form method="post" id="editTeacherForm">
+        {% csrf_token %}
+        <input type="hidden" name="teacher_id" id="edit_teacher_id">
+        
+        <label for="edit_name">Name:</label>
+        <input type="text" id="edit_name" name="name" required>
+        
+        <label for="edit_email">Email:</label>
+        <input type="email" id="edit_email" name="email" required>
+        
+        <label for="edit_subject">Subject:</label>
+        <input type="text" id="edit_subject" name="subject" required>
+        
+        <button type="submit" class="save-btn">Update</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openModal() { document.getElementById('teacherModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('teacherModal').style.display = 'none'; }
+
+    function openEditModal(id, name, subject, email) {
+        document.getElementById('edit_teacher_id').value = id;
+        document.getElementById('edit_name').value = name;
+        document.getElementById('edit_subject').value = subject;
+        document.getElementById('edit_email').value = email;
+        document.getElementById('editTeacherForm').action = '/edit_teacher/' + id + '/';
+        document.getElementById('editTeacherModal').style.display = 'flex';
+    }
+
+    function closeEditModal() { document.getElementById('editTeacherModal').style.display = 'none'; }
+
+    // Close modals if clicking outside
+    window.onclick = function(e) {
+        if (e.target == document.getElementById('teacherModal')) closeModal();
+        if (e.target == document.getElementById('editTeacherModal')) closeEditModal();
+    }
+  </script>
+
+  
+  {% endblock %}

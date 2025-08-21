@@ -1,0 +1,124 @@
+
+  {% extends "baselayout.html" %}
+
+  {% block title %} 
+  
+  Class Management - Springfield Public School 
+ 
+  
+  {% endblock %}
+
+ 
+  {% block content %}
+  {% load permission_tags %}
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Manage Classes</h1>
+    {% if request|check_permission:"add_class" %}
+    <button class="add-btn" onclick="openModal()">+ Add Class</button>
+    {% endif %}
+
+    <h1>Class List</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Class Name</th>
+            <th>Section</th>
+            <th>Teacher</th>
+            <th>Actions</th>
+        </tr>
+        {% for cls in classes %}
+        <tr>
+            <td>{{ cls.id }}</td>
+            <td>{{ cls.name }}</td>
+            <td>{{ cls.section }}</td>
+            <td>{{ cls.teacher }}</td>
+            <td class="actions">
+              {% if request|check_permission:"events_edit" %}
+                <button class="edit-btn" onclick="openEditModal({{ cls.id }}, '{{ cls.name }}', '{{ cls.section }}', '{{ cls.teacher }}')">Edit</button>
+              {% endif %}
+                <form method="post" action="{% url 'delete_class' cls.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    {% if request|check_permission:"events_delete" %}
+                    <button type="submit" class="delete-btn">Delete</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No classes found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+
+  <!-- Add Class Modal -->
+  <div class="modal" id="classModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">X</button>
+      <h2>Add Class</h2>
+      <form method="post" action="{% url 'add_class' %}">
+        {% csrf_token %}
+        <label for="name">Class Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="section">Section:</label>
+        <input type="text" id="section" name="section" required>
+
+        <label for="teacher">Teacher:</label>
+        <input type="text" id="teacher" name="teacher" required>
+
+        <button type="submit" class="save-btn">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Class Modal -->
+  <div class="modal" id="editClassModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeEditModal()">X</button>
+        <h2>Edit Class</h2>
+        <form method="post" id="editClassForm">
+            {% csrf_token %}
+            <input type="hidden" id="edit_class_id" name="id">
+
+            <label for="edit_name">Class Name:</label>
+            <input type="text" id="edit_name" name="name" required>
+
+            <label for="edit_section">Section:</label>
+            <input type="text" id="edit_section" name="section" required>
+
+            <label for="edit_teacher">Teacher:</label>
+            <input type="text" id="edit_teacher" name="teacher" required>
+
+            <button type="submit" class="save-btn">Update</button>
+        </form>
+    </div>
+  </div>
+
+  <script>
+    function openModal() { document.getElementById('classModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('classModal').style.display = 'none'; }
+
+    function openEditModal(id, name, section, teacher) {
+      document.getElementById('edit_class_id').value = id;
+      document.getElementById('edit_name').value = name;
+      document.getElementById('edit_section').value = section;
+      document.getElementById('edit_teacher').value = teacher;
+
+      document.getElementById('editClassForm').action = '/edit_class/' + id + '/';
+      document.getElementById('editClassModal').style.display = 'flex';
+    }
+
+    function closeEditModal() { document.getElementById('editClassModal').style.display = 'none'; }
+
+    window.onclick = function(e) {
+        if (e.target == document.getElementById('classModal')) closeModal();
+        if (e.target == document.getElementById('editClassModal')) closeEditModal();
+    }
+  </script>
+
+  
+  {% endblock %}

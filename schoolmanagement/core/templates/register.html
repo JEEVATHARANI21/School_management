@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register - Springfield Public School</title>
+  <meta name="description" content="Registration page for Springfield Public School." />
+  <style>
+    /* Base reset */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Poppins', Arial, sans-serif;
+      color:#1a1a1a;
+      height:100vh; display:flex; justify-content:center; align-items:center;
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Color palette */
+    :root {
+      --primary:#0d3b66;
+      --secondary:#f95738;
+      --accent:#faa916;
+      --light:#ffffff;
+      --text-dark:#1a1a1a;
+    }
+
+    /* Animated gradient background */
+    body::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(-45deg,
+        rgba(13,59,102,0.85),
+        rgba(249,87,56,0.7),
+        rgba(250,169,22,0.7),
+        rgba(244,244,249,0.65)
+      );
+      background-size:400% 400%;
+      animation:gradientShift 20s ease infinite;
+      z-index:0;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position:0% 50%; }
+      50% { background-position:100% 50%; }
+      100% { background-position:0% 50%; }
+    }
+
+    /* Register card */
+    .register-container {
+      position:relative;
+      z-index:1;
+      background:var(--light);
+      padding:2.5rem;
+      border-radius:12px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.2);
+      width:100%; max-width:420px;
+      animation:fadeIn 1.2s ease-in-out;
+    }
+
+    h1 {
+      text-align:center;
+      color:var(--primary);
+      margin-bottom:1.5rem;
+      font-size:1.8rem;
+    }
+
+    label {
+      display:block;
+      margin-bottom:.4rem;
+      font-weight:600;
+      text-align:left;
+      color:var(--primary);
+    }
+
+    input, select {
+      width:100%;
+      padding:.75rem;
+      margin-bottom:1rem;
+      border:1px solid #ccc;
+      border-radius:6px;
+      font-size:1rem;
+      transition:border-color .3s ease;
+    }
+    input:focus, select:focus {
+      border-color:var(--accent);
+      outline:none;
+    }
+
+    /* Button styling */
+    button {
+      width:100%;
+      padding:.85rem;
+      border:none;
+      border-radius:30px;
+      font-size:1rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:all .3s ease;
+      background:var(--secondary);
+      color:var(--light);
+    }
+    button:hover {
+      background:#d1462d;
+      transform:translateY(-2px);
+    }
+
+    .back-link {
+      display:block;
+      text-align:center;
+      margin-top:1rem;
+      text-decoration:none;
+      font-weight:600;
+      color:var(--primary);
+      transition:color .3s ease;
+    }
+    .back-link:hover {
+      color:var(--secondary);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity:0; transform:translateY(20px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width:480px) {
+      .register-container {
+        padding:1.5rem;
+      }
+      h1 { font-size:1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h1>Register</h1>
+    <form method="POST" action="{% url 'newregister' %}">
+      {% csrf_token %}
+      
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" name="fullname" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+
+      <label for="confirm-password">Confirm Password</label>
+      <input type="password" id="confirm-password" name="confirm-password" required />
+
+      <label for="role">Select Role</label>
+      <select id="role" name="role" required>
+        <option value="" disabled selected>Choose your role</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+        <option value="parent">Parent</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <!-- Optional redirect field -->
+      <input type="hidden" name="next" value="{% url 'dashboard' %}">
+
+      <button type="submit">Register</button>
+    </form>
+    <a href="{% url 'login' %}" class="back-link">Already have an account? Login</a>
+  </div>
+</body>
+</html>
