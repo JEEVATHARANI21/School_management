@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect   # <-- add redirect here
+from django.shortcuts import render, redirect
 from .models import Newregester, Teacher , Student , Class , Event , Role ,Permission, RolePermission
 from django.contrib.auth.hashers import make_password, check_password
 from django.http import HttpResponse
@@ -6,6 +6,9 @@ from django.shortcuts import  render, get_object_or_404, redirect
 from functools import wraps
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import logout
+
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
 
 def role_required(role):
     def decorator(view_func):
