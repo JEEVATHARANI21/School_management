@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'accounts',
-    
 ]
 
 MIDDLEWARE = [
@@ -77,23 +75,9 @@ WSGI_APPLICATION = 'schoolmanagement.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME':'schooldb',
-        'USER':'root',
-        'PASSWORD':'',
-        'HOST':'localhost',
-        'PORT':'3306',
-        'OPTIONS': {
-            'init_command': (
-                "SET sql_mode='STRICT_TRANS_TABLES,"
-                "ERROR_FOR_DIVISION_BY_ZERO,"
-                "NO_ZERO_DATE,"
-                "NO_ZERO_IN_DATE,"
-                "ONLY_FULL_GROUP_BY'"
-            ),
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-    
 }
 
 
