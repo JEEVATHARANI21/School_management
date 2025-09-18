@@ -6,7 +6,7 @@ services:
     repo: https://github.com/your-username/your-repo-name.git
     branch: main # Or master, depending on your default branch
     buildCommand: "./build.sh"
-    startCommand: "gunicorn --chdir schoolmanagement schoolmanagement.wsgi:application"
+    startCommand: "gunicorn schoolmanagement.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
