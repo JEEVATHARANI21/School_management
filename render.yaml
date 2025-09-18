@@ -6,7 +6,7 @@ services:
     repo: https://github.com/your-username/your-repo-name.git
     branch: main # Or master, depending on your default branch
     buildCommand: "./build.sh"
-    startCommand: "gunicorn schoolmanagement.wsgi:application"
+    startCommand: "gunicorn --chdir schoolmanagement schoolmanagement.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -17,8 +17,8 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.4 # Or your preferred Python version
 
-  - type: pserv # pserv stands for PostgreSQL Service
+  - type: mysql
     name: schoolmanagement-db
-    env: postgres
+    # Render will use a recent stable version of MySQL.
     disk:
       sizeGB: 1
