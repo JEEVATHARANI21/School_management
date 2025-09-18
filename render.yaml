@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: schoolmanagement
+    env: python
+    # Make sure to replace the repo URL with your own
+    repo: https://github.com/your-username/your-repo-name.git
+    branch: main # Or master, depending on your default branch
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn schoolmanagement.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: schoolmanagement-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true # Render will generate a secure secret key
+      - key: PYTHON_VERSION
+        value: 3.11.4 # Or your preferred Python version
+
+  - type: pserv # pserv stands for PostgreSQL Service
+    name: schoolmanagement-db
+    env: postgres
+    disk:
+      sizeGB: 1
