@@ -3,7 +3,7 @@ services:
     name: schoolmanagement
     env: python
     # Make sure to replace the repo URL with your own
-    repo: https://github.com/your-username/your-repo-name.git
+    repo: https://github.com/JEEVATHARANI21/School_management.git
     branch: main # Or master, depending on your default branch
     buildCommand: "./build.sh"
     startCommand: "gunicorn schoolmanagement.wsgi:application"
